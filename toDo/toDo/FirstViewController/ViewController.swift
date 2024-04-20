@@ -57,33 +57,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
 
     override func viewDidLoad() {
-        
-
         super.viewDidLoad()
-        //fetchTasksFromFirebase()
     }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         doneBtn.setTitle("Done", for: .normal)
         progressBtn.setTitle("In Progress", for: .normal)
         todoBtn.setTitle("To Do", for: .normal)
+        getSnapshot()
        
     }
+    
+    
     @IBAction func filterTasks(_ sender: UIButton) {
         if let previousButton = activeButton {
                previousButton.isEnabled = true
            }
-           
-           // Yeni butonu devre dışı bırak
            sender.isEnabled = false
            activeButton = sender
-        getSnapshot()
-           
-           //filtertasks.removeAll()
-        
-        // filteredTasks'ı Task türünde bir dizi olarak tanımlayın
-
+           getSnapshot()
         for task in allTasks {
             if let status = task.status as? String, let buttonTitle = sender.titleLabel?.text, status == buttonTitle {
                 filteredTasks.append(task)
@@ -95,13 +90,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.reloadData()
         mainView.addSubview(tableView)
         filteredTasks.removeAll()
+    }
     
-        
-
-
-           /*if mainView.subviews.count > 0 {
-               mainView.subviews.forEach { $0.removeFromSuperview() }
-           }*/
+    @IBAction func addedTask(_ sender: Any) {
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "TaskAddedViewController") as! TaskAddedViewController
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     func updateTableView(with tasks: [Task]) -> UITableView {
